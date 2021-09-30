@@ -25,6 +25,8 @@ package org.gstreamer.example;
 import org.gstreamer.Gst;
 import org.gstreamer.Version;
 
+import java.lang.reflect.Field;
+
 /**
  *
  */
@@ -39,5 +41,29 @@ public class InitTest {
         System.out.printf("Gstreamer version %d.%d.%d%s initialized!",
                 version.getMajor(), version.getMinor(), version.getMicro(),
                 version.getNano() == 1 ? " (CVS)" : version.getNano() >= 2 ? " (Pre-release)" : "");
+    }
+
+    public static void addLibraryPath(String property, String libraryPath){
+        String path = System.getProperty(property);
+        try {
+            if(path == null){
+                path = "";
+            }
+            if (!path.contains(libraryPath)) {
+                path = libraryPath + ";" + path;
+                System.setProperty(property, path);
+                final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
+                sysPathsField.setAccessible(true);
+                sysPathsField.set(null, null);
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public static void initPath(){
+        addLibraryPath("java.library.path", "E:\\gstreamer\\1.0\\mingw_x86_64\\bin");
+        addLibraryPath("jna.library.path", "E:\\gstreamer\\1.0\\mingw_x86_64\\bin");
+        addLibraryPath("path", "E:\\gstreamer\\1.0\\mingw_x86_64\\bin;E:\\gstreamer\\1.0\\mingw_x86_64\\lib\\gstreamer-1.0");
     }
 }

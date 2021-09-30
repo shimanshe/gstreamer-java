@@ -43,7 +43,9 @@ public class VideoPlayer {
         // Initialize the gstreamer framework, and let it interpret any command
         // line flags it is interested in.
         //
+        InitTest.initPath();
         args = Gst.init("VideoPlayer", args);
+        args = new String[]{"E:\\work\\gstreamer-java\\gstreamer-java\\data\\16329.MOV"};
         
         if (args.length < 1) {
             System.out.println("Usage: VideoPlayer <file to play>");
